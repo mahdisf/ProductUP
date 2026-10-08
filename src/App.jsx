@@ -100,9 +100,9 @@ export default function App() {
   </div>;
 
   if (view === 'home') return shell(<>
-    <div className="intro-grid"><section className="hero"><div className="hero-glow" /><div className="eyebrow">THE PRODUCT DECISION LAB</div><h1>Learn Product Management by making product decisions.</h1><p>Work through real trade-offs, get immediate feedback, and build better judgment in minutes.</p><button className="btn btn-primary" onClick={() => openLesson(lessons.find((item) => !data.progress[item.id]?.completed)?.id || 'target')}>{completedFirst ? 'Continue learning' : 'Start learning'}</button></section>
+    <div className="intro-grid"><section className="hero"><div className="hero-glow" /><div className="eyebrow">THE PRODUCT DECISION LAB</div><h1>Practice Product Management, one decision at a time.</h1><p>Short scenarios. Real trade-offs. Immediate feedback.</p><button className="btn btn-primary" onClick={() => go('learn')}>{completedFirst ? 'Continue learning' : 'Start learning'}</button></section>
       <aside className="snapshot"><h2>Your progress</h2><div className="snapshot-line"><span>Lessons completed</span><strong>{completedCount} / 3</strong></div><div className="snapshot-line"><span>Discovery skill</span><strong>{discoverySkill}%</strong></div><div className="meter" role="progressbar" aria-label="Discovery skill" aria-valuenow={discoverySkill} aria-valuemin="0" aria-valuemax="100"><span style={{ width: `${discoverySkill}%` }} /></div></aside></div>
-    <div className="section-head"><div><div className="eyebrow">YOUR MODULE</div><h2>Product Discovery & Validation</h2></div><p>Three focused lessons</p></div>{lessonCards}<p className="module-note">No account needed. Progress stays on this device.</p><button className="reset" onClick={reset}>Reset demo progress</button>
+    <p className="module-note">No account needed. Progress stays on this device.</p><details className="demo-controls"><summary>Demo controls</summary><button className="reset" onClick={reset}>Reset demo progress</button></details>
   </>);
 
   if (view === 'learn') return shell(<>
