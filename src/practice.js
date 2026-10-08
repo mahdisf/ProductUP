@@ -3,7 +3,7 @@ export const practice = {
     title: 'Review', intro: 'Recall the decision, then apply it in a different setting.', skill: 'Concept recall',
     stages: [
       {
-        kicker: 'LEVEL 1 · OPPORTUNITY JUDGMENT', title: 'Does a loud request deserve the target?',
+        kicker: 'QUESTION 1 · OPPORTUNITY JUDGMENT', title: 'Does a loud request deserve the target?',
         body: 'Goal: 60-day retention. Exports are requested by 45% of active accounts. New teams failing their first schedule churn at twice the usual rate.',
         prompt: 'Which opportunity should the PM investigate first?',
         options: [
@@ -13,7 +13,7 @@ export const practice = {
         ],
       },
       {
-        kicker: 'LEVEL 2 · ASSUMPTION TESTING', title: 'What would invalidate the solution?',
+        kicker: 'QUESTION 2 · ASSUMPTION TESTING', title: 'What would invalidate the solution?',
         body: 'Automatic meeting summaries are proposed. Transcription works. The goal is faster follow-through on decisions.',
         prompt: 'Which assumption should the team test first?',
         options: [
@@ -28,7 +28,7 @@ export const practice = {
     title: 'PM Gym', intro: 'Make a product call as new evidence and constraints appear.', skill: 'Product judgment',
     stages: [
       {
-        kicker: 'LEVEL 1 · DIAGNOSE', title: 'Growth is hiding a retention problem.',
+        kicker: 'QUESTION 1 · DIAGNOSE', title: 'Growth is hiding a retention problem.',
         body: 'New users +20%. Orders +8%. Retention −17%. Late-delivery tickets +35%. Growth wants more ad spend.',
         prompt: 'What should you do in the next sprint?',
         options: [
@@ -38,7 +38,7 @@ export const practice = {
         ],
       },
       {
-        kicker: 'LEVEL 2 · TRADE-OFF', title: 'One sprint of capacity. Two credible paths.',
+        kicker: 'QUESTION 2 · TRADE-OFF', title: 'One sprint of capacity. Two credible paths.',
         body: 'Late first deliveries predict churn. Ops can pilot a dispatch fix in one city now. Engineering offers a six-week tracking rebuild.',
         prompt: 'Which move gives the team the strongest next decision?',
         options: [

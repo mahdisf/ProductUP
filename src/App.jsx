@@ -17,6 +17,22 @@ const percent = (lesson, data, includeCompletion = true) => {
   return Math.min(94, lesson.baseSkill + correct * 2 + (includeCompletion && data.progress[lesson.id]?.completed ? 9 : 0));
 };
 
+const upcomingLessons = [
+  { module: '03 · Discovery & Validation', category: 'Validation', title: 'Behavioral evidence vs stated preference' },
+  { module: '03 · Discovery & Validation', category: 'Validation', title: 'Evidence strength ladder' },
+  { module: '04 · UX & Product Design', category: 'Experience Mapping', title: 'Service blueprint' },
+  { module: '05 · Product Analytics', category: 'North Star', title: 'North Star input metrics' },
+  { module: '06 · Experimentation', category: 'A/B Testing', title: 'Minimum detectable effect' },
+  { module: '07 · Product Strategy', category: 'Strategy Foundations', title: 'Strategic choices and trade-offs' },
+  { module: '08 · Prioritization', category: 'Prioritization Basics', title: 'When not to follow the RICE ranking' },
+  { module: '09 · Product Delivery', category: 'Release', title: 'Progressive rollout' },
+  { module: '10 · Technical Fluency', category: 'APIs', title: 'API versioning and backward compatibility' },
+];
+
+function LockIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><rect x="5.5" y="10.5" width="13" height="10" rx="2" stroke="currentColor" strokeWidth="2" /><path d="M8.5 10V7a3.5 3.5 0 0 1 7 0v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>;
+}
+
 export default function App() {
   const [data, setData] = useState(loadData);
   const [view, setView] = useState('home');
@@ -76,17 +92,39 @@ export default function App() {
     go('home');
   };
 
-  const lessonCards = <div className="lesson-list">{lessons.map((item) => {
+  const roadmap = <section className="learning-roadmap" aria-label="Advanced learning roadmap">
+    <header className="roadmap-intro">
+      <div><div className="roadmap-eyebrow">ADVANCED PATH · MODULE 03</div><h1>Your learning path</h1><p>Choose a decision. Build the skill. Move forward.</p></div>
+      <div className="roadmap-progress"><strong>{completedCount}<span> / 3</span></strong><small>lessons complete</small><div className="roadmap-meter" role="progressbar" aria-label="Playable lessons completed" aria-valuenow={completedCount} aria-valuemin="0" aria-valuemax="3"><span style={{ width: `${(completedCount / 3) * 100}%` }} /></div></div>
+    </header>
+    <div className="roadmap-path"><div className="roadmap-chapter"><span className="chapter-index">03</span><div><span className="roadmap-eyebrow">CURRENT MODULE</span><h2>Product Discovery & Validation</h2></div><span className="chapter-count">3 playable</span></div>
+    {lessons.map((item, index) => {
     const progress = data.progress[item.id] || {};
     const attempted = Object.keys(data.answers).filter((key) => key.startsWith(`${item.id}:`)).length;
-    return <article className="lesson-card" key={item.id}>
-      <div className="lesson-num">{item.number}</div>
-      <div className="lesson-info"><h3>{item.title}</h3><p>{item.topic}</p><div className="lesson-meta"><span className={`tag ${progress.completed ? 'done' : ''}`}>{progress.completed ? 'Completed' : item.category}</span><span>{item.time}</span><span>{progress.completed ? `Skill ${percent(item, data)}%` : attempted ? `${attempted} of ${item.steps.length} steps` : 'Advanced'}</span></div></div>
-      <button className="btn btn-soft" onClick={() => openLesson(item.id)}>{progress.completed ? 'View recap' : attempted ? 'Continue' : 'Start lesson'}</button>
-    </article>;
-  })}</div>;
+    const action = progress.completed ? 'View recap' : attempted ? 'Continue lesson' : 'Start lesson';
+    return <div className={`route-row route-row-active tone-${index} ${progress.completed ? 'route-done' : ''}`} key={item.id}>
+      <span className="route-node" aria-hidden="true">{progress.completed ? '✓' : item.number}</span>
+      <button className="route-card" onClick={() => openLesson(item.id)} aria-label={`${action}: ${item.title}`}>
+        <span className="route-meta">{item.category} <span>·</span> {item.time}</span>
+        <strong>{item.title}</strong>
+        <span className="route-topic">{item.topic}</span>
+        <span className="route-action">{progress.completed ? 'Completed · View recap' : attempted ? `Continue · ${attempted} of ${item.steps.length} steps` : 'Start lesson'}</span>
+      </button>
+    </div>;
+  })}
+    <div className="roadmap-divider"><span>EXPLORE WHAT COMES NEXT</span><small>Preview only</small></div>
+    {upcomingLessons.map((item) => <div className="route-row route-row-locked" key={`${item.module}-${item.title}`}>
+      <span className="route-node" aria-hidden="true"><LockIcon /></span>
+      <div className="route-card route-card-locked" aria-label={`${item.title}, locked lesson`}>
+        <span className="route-meta">{item.module} <span>·</span> {item.category}</span>
+        <strong>{item.title}</strong>
+        <span className="route-lock"><LockIcon /> Not available yet</span>
+      </div>
+    </div>)}
+    </div>
+  </section>;
 
-  const shell = (body) => <div className="app">
+  const shell = (body) => <div className={`app ${isMainPage ? '' : 'activity-view'}`}>
     <aside className="sidebar"><div className="brand"><span className="brand-mark">P</span><span className="brand-name">ProductUP</span></div>
       <nav className="nav" aria-label="Main navigation">
         <button className={`nav-btn ${view === 'home' ? 'active' : ''}`} onClick={() => go('home')}><span className="nav-icon">⌂</span><span className="nav-label">Home</span></button>
@@ -95,25 +133,25 @@ export default function App() {
         <button className={`nav-btn ${view === 'gym-home' ? 'active' : ''}`} onClick={() => go('gym-home')}><span className="nav-icon">◇</span><span className="nav-label">PM Gym</span></button>
       </nav><div className="sidebar-foot"><strong>Practice, then learn.</strong>Short product decisions with immediate feedback.</div>
     </aside>
-    <main className="main"><header className="topbar"><span className="crumb">PRODUCT DISCOVERY / ADVANCED</span><div className="top-stats"><span className="stat-pill">◉ {data.streak.count} day streak</span><span className="stat-pill xp">✦ {data.xp} XP</span></div></header><div className="content">{body}</div></main>
+    <main className="main">{isMainPage && <header className="topbar"><span className="topbar-name">ProductUP</span><div className="top-stats"><span className="stat-pill">◉ {data.streak.count} day streak</span><span className="stat-pill xp">✦ {data.xp} XP</span></div></header>}<div className="content">{body}</div></main>
     {isMainPage && <nav className="mobile-nav" aria-label="Bottom navigation"><button onClick={() => go('home')} className={view === 'home' ? 'active' : ''}><span>⌂</span>Home</button><button onClick={() => go('learn')} className={view === 'learn' ? 'active' : ''}><span>▦</span>Learn</button><button onClick={() => go('review-home')} className={view === 'review-home' ? 'active' : ''}><span>↺</span>Review</button><button onClick={() => go('gym-home')} className={view === 'gym-home' ? 'active' : ''}><span>◇</span>PM Gym</button></nav>}
   </div>;
 
   if (view === 'home') return shell(<>
     <div className="intro-grid"><section className="hero"><div className="hero-glow" /><div className="eyebrow">THE PRODUCT DECISION LAB</div><h1>Practice Product Management, one decision at a time.</h1><p>Short scenarios. Real trade-offs. Immediate feedback.</p><button className="btn btn-primary" onClick={() => go('learn')}>{completedFirst ? 'Continue learning' : 'Start learning'}</button></section>
       <aside className="snapshot"><h2>Your progress</h2><div className="snapshot-line"><span>Lessons completed</span><strong>{completedCount} / 3</strong></div><div className="snapshot-line"><span>Discovery skill</span><strong>{discoverySkill}%</strong></div><div className="meter" role="progressbar" aria-label="Discovery skill" aria-valuenow={discoverySkill} aria-valuemin="0" aria-valuemax="100"><span style={{ width: `${discoverySkill}%` }} /></div></aside></div>
-    <p className="module-note">No account needed. Progress stays on this device.</p><details className="demo-controls"><summary>Demo controls</summary><button className="reset" onClick={reset}>Reset demo progress</button></details>
+    <details className="demo-controls"><summary>Demo controls</summary><button className="reset" onClick={reset}>Reset demo progress</button></details>
   </>);
 
   if (view === 'learn') return shell(<>
-    <div className="section-head"><div><div className="eyebrow">LEARN</div><h2>Product Discovery & Validation</h2></div><p>Advanced · 3 lessons</p></div>{lessonCards}<p className="module-note">Problem Discovery: lessons 1–2 · Solution Discovery: lesson 3</p>
+    {roadmap}
   </>);
 
   if (view === 'review-home' || view === 'gym-home') {
     const kind = view === 'review-home' ? 'review' : 'gym';
     const mode = practice[kind];
     const progress = data.progress[kind] || { stage: 0, completed: false };
-    return shell(<div className="lesson-shell"><div className="section-head"><div><div className="eyebrow">{kind === 'review' ? 'PILLAR 02' : 'PILLAR 03'}</div><h2>{mode.title}</h2></div><p>2 levels</p></div><section className="activity future"><div className="activity-kicker">{progress.completed ? 'PRACTICE COMPLETE' : `LEVEL ${(progress.stage || 0) + 1} READY`}</div><h1>{kind === 'review' ? 'Keep the judgment sharp.' : 'Make the product call.'}</h1><p>{mode.intro}</p><div className="activity-actions"><button className="btn btn-dark" onClick={() => go(kind)}>{progress.completed ? 'View results' : progress.stage ? 'Continue practice' : 'Start practice'}</button></div></section></div>);
+    return shell(<div className="lesson-shell"><div className="section-head"><div><div className="eyebrow">{kind === 'review' ? 'PILLAR 02' : 'PILLAR 03'}</div><h2>{mode.title}</h2></div><p>2 questions</p></div><section className="activity future"><div className="activity-kicker">{progress.completed ? 'PRACTICE COMPLETE' : `QUESTION ${(progress.stage || 0) + 1} READY`}</div><h1>{kind === 'review' ? 'Keep the judgment sharp.' : 'Make the product call.'}</h1><p>{mode.intro}</p><div className="activity-actions"><button className="btn btn-dark" onClick={() => go(kind)}>{progress.completed ? 'View results' : progress.stage ? 'Continue practice' : 'Start practice'}</button></div></section></div>);
   }
 
   if (view === 'review' || view === 'gym') {
@@ -129,14 +167,46 @@ export default function App() {
     };
     const continuePractice = () => {
       if (stageIndex < mode.stages.length - 1) {
-        setData((prev) => ({ ...prev, progress: { ...prev.progress, [view]: { stage: stageIndex + 1, completed: false } } }));
+        setData((prev) => ({ ...prev, progress: { ...prev.progress, [view]: { ...prev.progress[view], stage: stageIndex + 1 } } }));
       } else if (!progress.completed) {
         setData((prev) => ({ ...prev, xp: prev.xp + 20, progress: { ...prev.progress, [view]: { stage: mode.stages.length, completed: true } } }));
+      } else {
+        setData((prev) => ({ ...prev, progress: { ...prev.progress, [view]: { stage: mode.stages.length, completed: true } } }));
       }
       window.scrollTo(0, 0);
     };
-    if (progress.completed) return shell(<div className="lesson-shell"><div className="lesson-top"><button className="back-link" onClick={() => go(`${view}-home`)}>← Back to {mode.title}</button><span className="progress-count">2 of 2 levels complete</span></div><div className="progress-track"><span style={{ width: '100%' }} /></div><section className="activity"><div className="activity-kicker">{mode.title.toUpperCase()} COMPLETE</div><h1>Two decisions, one stronger habit.</h1><p>{view === 'review' ? 'You revisited opportunity judgment and assumption testing in fresh settings.' : 'You diagnosed a retention problem and made a capacity trade-off using new evidence.'}</p><div className="reward"><div><strong>+{20 + mode.stages.reduce((total, _, index) => total + (data.answers[answerKey(view, index)]?.xp || 0), 0)} XP</strong><span>Earned across two levels</span></div><div><strong>2 / 2</strong><span>{mode.skill} levels complete</span></div></div><div className="activity-actions"><button className="btn btn-ghost" onClick={() => go(`${view}-home`)}>Back to {mode.title}</button><button className="btn btn-dark" onClick={() => go('learn')}>Explore lessons</button></div></section></div>);
-    return shell(<div className="lesson-shell"><div className="lesson-top"><button className="back-link" onClick={() => go(`${view}-home`)}>← Back to {mode.title}</button><span className="progress-count">Level {stageIndex + 1} of 2</span></div><div className="progress-track" role="progressbar" aria-label={`${mode.title} progress`} aria-valuenow={stageIndex + 1} aria-valuemin="0" aria-valuemax="2"><span style={{ width: `${((stageIndex + 1) / 2) * 100}%` }} /></div><section className="activity"><div className="activity-kicker">{stage.kicker}</div><h1>{stage.title}</h1><p>{stage.body}</p><div className="prompt">{stage.prompt}</div><div className="options">{stage.options.map((option, index) => (!stageAnswer || stageAnswer.value === index) && <button key={option.label} disabled={!!stageAnswer} aria-pressed={draft === index || stageAnswer?.value === index} className={`option ${(draft === index || stageAnswer?.value === index) ? 'selected' : ''} ${stageAnswer && stageAnswer.value === index ? stageAnswer.correct ? 'correct' : 'incorrect' : ''}`} onClick={() => setDraft(index)}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option.label}</button>)}</div>{stageAnswer ? <Feedback answer={stageAnswer} onContinue={continuePractice} /> : <div className="activity-actions"><button className="btn btn-dark" disabled={draft === null} onClick={submit}>Submit decision</button></div>}</section><p className="small-note lesson-note">{mode.intro}</p></div>);
+    const previousPractice = () => {
+      setData((prev) => ({ ...prev, progress: { ...prev.progress, [view]: { ...prev.progress[view], stage: stageIndex - 1 } } }));
+      window.scrollTo(0, 0);
+    };
+    const reviewQuestions = () => {
+      setData((prev) => ({ ...prev, progress: { ...prev.progress, [view]: { stage: mode.stages.length - 1, completed: true } } }));
+      window.scrollTo(0, 0);
+    };
+    if (progress.completed && stageIndex >= mode.stages.length) return shell(
+      <div className="lesson-shell">
+        <div className="lesson-top"><button className="back-link" onClick={() => go(`${view}-home`)}>← Back to {mode.title}</button><span className="progress-count">2 of 2 questions complete</span></div>
+        <div className="progress-track"><span style={{ width: '100%' }} /></div>
+        <section className="activity">
+          <div className="activity-kicker">{mode.title.toUpperCase()} COMPLETE</div>
+          <h1>Two decisions, one stronger habit.</h1>
+          <p>{view === 'review' ? 'You revisited opportunity judgment and assumption testing in fresh settings.' : 'You diagnosed a retention problem and made a capacity trade-off using new evidence.'}</p>
+          <div className="reward"><div><strong>+{20 + mode.stages.reduce((total, _, index) => total + (data.answers[answerKey(view, index)]?.xp || 0), 0)} XP</strong><span>Earned across two questions</span></div><div><strong>2 / 2</strong><span>Questions complete</span></div></div>
+          <div className="activity-actions"><button className="btn btn-ghost" onClick={reviewQuestions}>Review questions</button><button className="btn btn-dark" onClick={() => go(`${view}-home`)}>Back to {mode.title}</button></div>
+        </section>
+      </div>
+    );
+    return shell(
+      <div className="lesson-shell">
+        <div className="lesson-top"><button className="back-link" onClick={stageIndex > 0 ? previousPractice : () => go(`${view}-home`)}>{stageIndex > 0 ? '← Previous question' : `← Back to ${mode.title}`}</button><span className="progress-count">Question {stageIndex + 1} of 2</span></div>
+        <div className="progress-track" role="progressbar" aria-label={`${mode.title} progress`} aria-valuenow={stageIndex + 1} aria-valuemin="0" aria-valuemax="2"><span style={{ width: `${((stageIndex + 1) / 2) * 100}%` }} /></div>
+        <section className="activity">
+          <div className="activity-kicker">{stage.kicker}</div><h1>{stage.title}</h1><p>{stage.body}</p><div className="prompt">{stage.prompt}</div>
+          <div className="options">{stage.options.map((option, index) => (!stageAnswer || stageAnswer.value === index) && <button key={option.label} disabled={!!stageAnswer} aria-pressed={draft === index || stageAnswer?.value === index} className={`option ${(draft === index || stageAnswer?.value === index) ? 'selected' : ''} ${stageAnswer && stageAnswer.value === index ? stageAnswer.correct ? 'correct' : 'incorrect' : ''}`} onClick={() => setDraft(index)}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option.label}</button>)}</div>
+          {stageAnswer ? <Feedback answer={stageAnswer} onContinue={continuePractice} /> : <div className="activity-actions"><button className="btn btn-dark" disabled={draft === null} onClick={submit}>Submit decision</button></div>}
+        </section>
+      </div>
+    );
   }
 
   if (view === 'recap') {
@@ -147,7 +217,6 @@ export default function App() {
   }
 
   if (!step) return shell(<div className="lesson-shell"><p>Lesson state unavailable.</p><button className="btn btn-dark" onClick={() => go('home')}>Back to Home</button></div>);
-  const requiresAnswer = step.type !== 'concept';
   let activity;
   if (step.type === 'concept') activity = <><div className="concept-rule">{step.chain.map((part, index) => <span key={part}>{part}{index < step.chain.length - 1 ? ' →' : ''}</span>)}</div><div className="activity-actions"><button className="btn btn-dark" onClick={nextStep}>Apply the concept</button></div></>;
   if (step.type === 'choice') activity = <>
@@ -175,7 +244,7 @@ export default function App() {
     </>;
   }
 
-  return shell(<div className="lesson-shell"><div className="lesson-top"><button className="back-link" onClick={() => go('home')}>← Back to lessons</button><span className="progress-count">Step {stepIndex + 1} of {lesson.steps.length}</span></div><div className="progress-track" role="progressbar" aria-label="Lesson progress" aria-valuenow={stepIndex + 1} aria-valuemin="0" aria-valuemax={lesson.steps.length}><span style={{ width: `${((stepIndex + 1) / lesson.steps.length) * 100}%` }} /></div><section className="activity"><div className="activity-kicker">{step.kicker}</div><h1>{step.title}</h1><p>{step.body}</p>{step.facts && <div className="scenario-facts">{step.facts.map((fact) => <div key={fact}>{fact}</div>)}</div>}{activity}</section><p className="small-note lesson-note">{requiresAnswer ? 'Your first answer is recorded so you can learn from the decision.' : 'One small concept, then another decision.'}</p></div>);
+  return shell(<div className="lesson-shell"><div className="lesson-top"><button className="back-link" onClick={() => go('learn')}>← Back to lessons</button><span className="progress-count">Step {stepIndex + 1} of {lesson.steps.length}</span></div><div className="progress-track" role="progressbar" aria-label="Lesson progress" aria-valuenow={stepIndex + 1} aria-valuemin="0" aria-valuemax={lesson.steps.length}><span style={{ width: `${((stepIndex + 1) / lesson.steps.length) * 100}%` }} /></div><section className="activity"><div className="activity-kicker">{step.kicker}</div><h1>{step.title}</h1><p>{step.body}</p>{step.facts && <div className="scenario-facts">{step.facts.map((fact) => <div key={fact}>{fact}</div>)}</div>}{activity}</section></div>);
 }
 
 function Feedback({ answer, onContinue }) {
