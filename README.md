@@ -1,4 +1,4 @@
-# Product Practice
+# ProductUP
 
 A Phase 0 Product Management learning prototype. Three advanced lessons use realistic decisions, immediate feedback, and local progress. No account or backend is required.
 

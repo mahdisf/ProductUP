@@ -87,7 +87,7 @@ export default function App() {
   })}</div>;
 
   const shell = (body) => <div className="app">
-    <aside className="sidebar"><div className="brand"><span className="brand-mark">P</span><span className="brand-name">Product Practice</span></div>
+    <aside className="sidebar"><div className="brand"><span className="brand-mark">P</span><span className="brand-name">ProductUP</span></div>
       <nav className="nav" aria-label="Main navigation">
         <button className={`nav-btn ${view === 'home' ? 'active' : ''}`} onClick={() => go('home')}><span className="nav-icon">⌂</span><span className="nav-label">Home</span></button>
         <button className={`nav-btn ${view === 'learn' ? 'active' : ''}`} onClick={() => go('learn')}><span className="nav-icon">▦</span><span className="nav-label">Learn</span></button>
