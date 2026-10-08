@@ -1,6 +1,6 @@
 # ProductUP
 
-A Phase 0 Product Management learning prototype. Three advanced lessons use realistic decisions, immediate feedback, and local progress. No account or backend is required.
+A Phase 0 Product Management learning prototype with short decisions, immediate feedback, and local progress. The interface is Persian by default and can switch to English. No account or backend is required.
 
 ## Run locally
 
