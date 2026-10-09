@@ -16,3 +16,5 @@ Push this directory as the public [`mahdisf/ProductUP`](https://github.com/mahdi
 GitHub Pages serves a project repository at `https://mahdisf.github.io/ProductUP/`. Since the existing user site uses `mahdisf.ir` as its custom domain, GitHub Pages should also serve this project at `https://mahdisf.ir/ProductUP/` as long as this project repository has no separate custom domain.
 
 Progress and validation responses are stored in each visitor's browser only. They are not collected centrally.
+
+Persian text uses the self-hosted [Vazirmatn](https://github.com/rastikerdar/vazirmatn) font under the SIL Open Font License 1.1.
