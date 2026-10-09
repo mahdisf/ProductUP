@@ -20,6 +20,32 @@ const skillPercent = (lesson, data, withCompletion = true) => {
   return Math.min(94, lesson.baseSkill + correct * 2 + (withCompletion && data.progress[lesson.id]?.completed ? 9 : 0));
 };
 
+function optionOrder(count, key) {
+  // Keep display order stable while saved answers continue to use source indices.
+  let hash = 0;
+  for (const character of key) hash = (hash * 31 + character.charCodeAt(0)) | 0;
+  const shift = Math.abs(hash) % count;
+  return Array.from({ length: count }, (_, index) => (index + shift) % count);
+}
+
+const optionMarker = (index, language) => language === 'fa'
+  ? ['الف', 'ب', 'پ', 'ت', 'ث', 'ج'][index]
+  : String.fromCharCode(65 + index);
+
+function ChoiceOptions({ options, seed, answer, draft, onSelect, language }) {
+  return <div className="options">{optionOrder(options.length, seed).map((optionIndex, displayIndex) => {
+    const option = options[optionIndex];
+    const chosen = draft === optionIndex || answer?.value === optionIndex;
+    return (!answer || answer.value === optionIndex) && <button
+      key={optionIndex}
+      disabled={!!answer}
+      aria-pressed={chosen}
+      className={`option ${chosen ? 'selected' : ''} ${answer && answer.value === optionIndex ? answer.correct ? 'correct' : 'incorrect' : ''}`}
+      onClick={() => onSelect(optionIndex)}
+    ><span className="option-letter">{optionMarker(displayIndex, language)}</span>{option.label}</button>;
+  })}</div>;
+}
+
 function Feedback({ answer, feedbackText, onContinue, t, fmt }) {
   const heading = answer.correct ? `${t.strongDecision} · +${fmt(answer.xp)} XP` : answer.xp ? `${t.partialDecision} · +${fmt(answer.xp)} XP` : t.notQuite;
   const explanation = answer.correct
@@ -194,7 +220,7 @@ export default function App() {
       <div className="lesson-top"><button className="back-link" onClick={stageIndex > 0 ? previousPractice : () => go(`${view}-home`)}>{backArrow} {stageIndex > 0 ? t.previousQuestion : `${t.backToSection} ${mode.title}`}</button><div className="lesson-status"><span className="progress-count">{t.question} {fmt(stageIndex + 1)}</span>{languageButton}</div></div>
       <div className="progress-track" role="progressbar" aria-label={mode.title} aria-valuenow={stageIndex + 1} aria-valuemin="0" aria-valuemax={mode.stages.length}><span style={{ width: `${((stageIndex + 1) / mode.stages.length) * 100}%` }} /></div>
       <section className="activity"><div className="activity-kicker">{stage.kicker}</div><h1>{stage.title}</h1><p>{stage.body}</p><div className="prompt">{stage.prompt}</div>
-        <div className="options">{stage.options.map((option, index) => (!stageAnswer || stageAnswer.value === index) && <button key={option.label} disabled={!!stageAnswer} aria-pressed={draft === index || stageAnswer?.value === index} className={`option ${(draft === index || stageAnswer?.value === index) ? 'selected' : ''} ${stageAnswer && stageAnswer.value === index ? stageAnswer.correct ? 'correct' : 'incorrect' : ''}`} onClick={() => setDraft(index)}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option.label}</button>)}</div>
+          <ChoiceOptions options={stage.options} seed={`${view}:${stageIndex}`} answer={stageAnswer} draft={draft} onSelect={setDraft} language={language} />
         {stageAnswer ? <Feedback answer={stageAnswer} feedbackText={stage.options[stageAnswer.value]?.feedback || ''} onContinue={continuePractice} t={t} fmt={fmt} /> : <div className="activity-actions"><button className="btn btn-dark" disabled={draft === null} onClick={submit}>{t.submitDecision}</button></div>}
       </section>
     </div>);
@@ -215,7 +241,7 @@ export default function App() {
   let activity;
   if (step.type === 'concept') activity = <><div className="concept-rule">{step.chain.map((part, index) => <span key={part}>{part}{index < step.chain.length - 1 ? language === 'fa' ? ' ←' : ' →' : ''}</span>)}</div><div className="activity-actions"><button className="btn btn-dark" onClick={nextStep}>{t.applyConcept}</button></div></>;
   if (step.type === 'choice') activity = <>
-    <div className="prompt">{step.prompt}</div><div className="options">{step.options.map((option, index) => (!answer || answer.value === index) && <button key={option.label} disabled={!!answer} aria-pressed={draft === index || answer?.value === index} className={`option ${(draft === index || answer?.value === index) ? 'selected' : ''} ${answer && answer.value === index ? answer.correct ? 'correct' : 'incorrect' : ''}`} onClick={() => setDraft(index)}><span className="option-letter">{String.fromCharCode(65 + index)}</span>{option.label}</button>)}</div>
+    <div className="prompt">{step.prompt}</div><ChoiceOptions options={step.options} seed={`${lesson.id}:${stepIndex}`} answer={answer} draft={draft} onSelect={setDraft} language={language} />
     {answer ? <Feedback answer={answer} feedbackText={step.options[answer.value]?.feedback || ''} onContinue={nextStep} t={t} fmt={fmt} /> : <div className="activity-actions"><button className="btn btn-dark" disabled={draft === null} onClick={() => { const selected = step.options[draft]; record(draft, !!selected.correct, selected.feedback, selected.correct ? stepIndex === lesson.steps.length - 1 ? 15 : 10 : 0); }}>{t.submitDecision}</button></div>}
   </>;
   if (step.type === 'rank') {
@@ -235,7 +261,10 @@ export default function App() {
   }
   if (step.type === 'multi') {
     const selected = Array.isArray(draft) ? draft : [];
-    activity = <><div className="prompt">{t.chooseExactly} {fmt(step.limit)}</div><div className="options">{step.options.map((option, index) => <div key={option.id}><button disabled={!!answer} aria-pressed={selected.includes(option.id) || answer?.value.includes(option.id)} className={`option ${(selected.includes(option.id) || answer?.value.includes(option.id)) ? 'selected' : ''}`} onClick={() => setDraft(selected.includes(option.id) ? selected.filter((id) => id !== option.id) : selected.length < step.limit ? [...selected, option.id] : selected)}><span className="option-letter">{selected.includes(option.id) || answer?.value.includes(option.id) ? '✓' : String.fromCharCode(65 + index)}</span>{option.label}</button>{answer && <div className="item-feedback">{step.correct.includes(option.id) ? t.useful : t.lessUseful}: {option.why}</div>}</div>)}</div>
+    activity = <><div className="prompt">{t.chooseExactly} {fmt(step.limit)}</div><div className="options">{optionOrder(step.options.length, `${lesson.id}:${stepIndex}:multi`).map((optionIndex, displayIndex) => {
+      const option = step.options[optionIndex];
+      return <div key={option.id}><button disabled={!!answer} aria-pressed={selected.includes(option.id) || answer?.value.includes(option.id)} className={`option ${(selected.includes(option.id) || answer?.value.includes(option.id)) ? 'selected' : ''}`} onClick={() => setDraft(selected.includes(option.id) ? selected.filter((id) => id !== option.id) : selected.length < step.limit ? [...selected, option.id] : selected)}><span className="option-letter">{selected.includes(option.id) || answer?.value.includes(option.id) ? '✓' : optionMarker(displayIndex, language)}</span>{option.label}</button>{answer && <div className="item-feedback">{step.correct.includes(option.id) ? t.useful : t.lessUseful}: {option.why}</div>}</div>;
+    })}</div>
       {answer ? <Feedback answer={answer} feedbackText={answer.correct ? t.multiCorrect : t.multiIncorrect} onContinue={nextStep} t={t} fmt={fmt} /> : <div className="activity-actions"><button className="btn btn-dark" disabled={selected.length !== step.limit} onClick={() => { const correct = step.correct.every((id) => selected.includes(id)); record(selected, correct, '', correct ? 15 : 0); }}>{t.submitEvidence}</button></div>}
     </>;
   }
