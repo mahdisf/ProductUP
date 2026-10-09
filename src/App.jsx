@@ -22,8 +22,11 @@ const skillPercent = (lesson, data, withCompletion = true) => {
 
 function Feedback({ answer, feedbackText, onContinue, t, fmt }) {
   const heading = answer.correct ? `${t.strongDecision} · +${fmt(answer.xp)} XP` : answer.xp ? `${t.partialDecision} · +${fmt(answer.xp)} XP` : t.notQuite;
+  const explanation = answer.correct
+    ? feedbackText.replace(/^(?:درست است|انتخاب خوبی است|شروع خوبی است|Yes|Right|Good start|Good call)\.\s*/u, '')
+    : feedbackText;
   return <>
-    <div className={`feedback ${answer.correct ? '' : 'miss'}`} role="status"><strong>{heading}</strong><p>{feedbackText}</p></div>
+    <div className={`feedback ${answer.correct ? '' : 'miss'}`} role="status"><strong>{heading}</strong><p>{explanation}</p></div>
     <div className="activity-actions"><button className="btn btn-dark" onClick={onContinue}>{t.continue}</button></div>
   </>;
 }

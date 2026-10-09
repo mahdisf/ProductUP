@@ -6,7 +6,7 @@ const enLessons = [
     title: 'Pick the first problem', topic: 'Opportunity tree', category: 'Finding the problem', skill: 'Choosing a problem', time: '6 min',
     takeaways: ['Start with the goal.', 'Watch what people do, not just what they request.', 'When the goal changes, rethink your choice.'],
     steps: [
-      { k: 'YOUR FIRST CALL', t: 'Four problems. One choice.', b: 'You run a team app. You want more teams to still use it after 3 months. You can study one problem this week.', f: ['New teams get stuck setting up.', 'Managers cannot see slow projects.', 'People get too many alerts.', 'Expert users want custom charts.'], p: 'Which problem do you check first?', o: [
+      { k: 'YOUR FIRST CALL', t: 'Four problems. One choice.', b: 'Your team app needs more people to stay. You can study one problem this week.', f: ['New teams get stuck setting up.', 'Managers cannot see slow projects.', 'People get too many alerts.', 'Expert users want custom charts.'], p: 'Which problem do you check first?', o: [
         ['Setting up a new team', 'Good start. If setup fails, a team may leave before it gets value. Check the data next.'],
         ['Manager reports', 'This may matter, but first see whether teams without reports leave more often.'],
         ['Too many alerts', 'People complain about alerts, but complaints alone do not show why teams leave.'],
@@ -25,7 +25,7 @@ const enLessons = [
         ['How many affected teams stayed', 'This is closest to the goal.'],
         ['Where teams get stuck during setup', 'This shows the problem in real use.'],
       ], feedback: 'Real behavior tied to the goal is strongest. Feature requests are only a clue.' },
-      { k: 'A TWIST', t: 'The goal changes.', b: 'Now the company wants to keep big customers. Missing reports affect fewer managers, but those accounts bring much more money.', p: 'What should you do?', o: [
+      { k: 'A TWIST', t: 'The goal changes.', b: 'Now the company wants to keep big customers. Fewer people need reports, but those accounts are worth more.', p: 'What should you do?', o: [
         ['Check the big-customer data again', 'Right. A new goal may mean a different problem matters most.'],
         ['Keep working on setup', 'Setup still matters, but the new goal is about big customers.'],
         ['Build reports right away', 'The signal is strong, but first check if missing reports cause them to leave.'],
@@ -81,7 +81,7 @@ const enLessons = [
     title: 'Test the biggest risk first', topic: 'Risky assumptions', category: 'Finding a solution', skill: 'Testing assumptions', time: '6 min',
     takeaways: ['Ask what could make the idea fail.', 'Test what is both unknown and important.', 'Start with a cheap, useful test.'],
     steps: [
-      { k: 'YOUR FIRST CALL', t: 'Will people use the advice?', b: 'Your team wants an AI helper to suggest weekly priorities. It can make advice, but few team leads review plans each week.', p: 'What should you test first?', o: [
+      { k: 'YOUR FIRST CALL', t: 'Will people use the advice?', b: 'An AI helper can suggest weekly plans. But team leads rarely review their plans.', p: 'What should you test first?', o: [
         ['Will leads use the advice to change a real plan?', 'Yes. If no one acts on the advice, the helper has little value.'],
         ['Can the advice sound polished?', 'Nice writing will not matter if no one uses the advice.'],
         ['Can the screen look good?', 'The look can change later. First test whether the idea helps.'],
@@ -148,7 +148,7 @@ const faLessons = [
     title: 'اول کدام مشکل؟', topic: 'درخت فرصت و راه‌حل', category: 'شناخت مشکل', skill: 'انتخاب مشکل', time: '۶ دقیقه',
     takeaways: ['از هدف شروع کن.', 'به رفتار مردم نگاه کن، نه فقط درخواست‌هایشان.', 'اگر هدف عوض شد، انتخابت را دوباره بررسی کن.'],
     steps: [
-      { k: 'تصمیم اول', t: 'چهار مشکل، یک انتخاب', b: 'مسئول یک برنامهٔ کار گروهی هستی. می‌خواهی گروه‌ها سه ماه بعد هم از آن استفاده کنند. این هفته فقط یک مشکل را می‌توانی بررسی کنی.', f: ['گروه‌های تازه در راه‌اندازی گیر می‌کنند.', 'مدیران نمی‌بینند کدام کار عقب افتاده.', 'اعضا پیام‌های زیادی می‌گیرند.', 'کاربران حرفه‌ای نمودار دلخواه می‌خواهند.'], p: 'اول کدام مشکل را بررسی می‌کنی؟', o: [
+      { k: 'تصمیم اول', t: 'چهار مشکل، یک انتخاب', b: 'می‌خواهی گروه‌ها مدت بیشتری از برنامه‌ات استفاده کنند. این هفته فقط یک مشکل را می‌توانی بررسی کنی.', f: ['گروه‌های تازه در راه‌اندازی گیر می‌کنند.', 'مدیران نمی‌بینند کدام کار عقب افتاده.', 'اعضا پیام‌های زیادی می‌گیرند.', 'کاربران حرفه‌ای نمودار دلخواه می‌خواهند.'], p: 'اول کدام مشکل را بررسی می‌کنی؟', o: [
         ['راه‌اندازی گروه‌های تازه', 'شروع خوبی است. اگر گروه همان اول گیر کند، شاید هرگز از برنامه استفاده نکند. حالا داده‌ها را ببین.'],
         ['گزارش برای مدیران', 'شاید مهم باشد؛ اول ببین گروه‌هایی که گزارش ندارند بیشتر می‌روند یا نه.'],
         ['پیام‌های زیاد', 'شکایت زیاد است، اما شکایت به‌تنهایی دلیل رفتن گروه‌ها را نشان نمی‌دهد.'],
@@ -167,7 +167,7 @@ const faLessons = [
         ['ماندن یا رفتن گروه‌هایی که مشکل دارند', 'این سرنخ از همه به هدف نزدیک‌تر است.'],
         ['دیدن جایی که گروه‌ها گیر می‌کنند', 'مشکل را در استفادهٔ واقعی نشان می‌دهد.'],
       ], feedback: 'رفتار واقعی که به هدف ربط دارد، محکم‌ترین سرنخ است. درخواست ویژگی فقط یک نشانه است.' },
-      { k: 'داستان عوض می‌شود', t: 'هدف تازه‌ای داری', b: 'حالا شرکت می‌خواهد مشتریان بزرگ را نگه دارد. مشکل گزارش برای افراد کمتری پیش می‌آید، ولی این مشتریان پول بیشتری می‌پردازند.', p: 'چه کار می‌کنی؟', o: [
+      { k: 'داستان عوض می‌شود', t: 'هدف تازه‌ای داری', b: 'حالا باید مشتریان بزرگ را نگه داری. افراد کمتری گزارش می‌خواهند، اما این مشتریان ارزش بیشتری دارند.', p: 'چه کار می‌کنی؟', o: [
         ['داده‌های مشتریان بزرگ را دوباره بررسی می‌کنم', 'درست است. با عوض شدن هدف، شاید مشکل مهم هم عوض شود.'],
         ['همان راه‌اندازی را ادامه می‌دهم', 'راه‌اندازی هنوز مهم است، ولی هدف تازه دربارهٔ مشتریان بزرگ است.'],
         ['بی‌درنگ گزارش می‌سازم', 'سرنخ خوبی داری، اما هنوز باید ببینی نبود گزارش باعث رفتن آنها می‌شود یا نه.'],
@@ -223,7 +223,7 @@ const faLessons = [
     title: 'اول بزرگ‌ترین خطر را امتحان کن', topic: 'آزمایش حدس‌های مهم', category: 'پیدا کردن راه‌حل', skill: 'آزمایش حدس‌ها', time: '۶ دقیقه',
     takeaways: ['بپرس چه چیزی می‌تواند ایده را خراب کند.', 'حدسی را آزمایش کن که هم نامطمئن است و هم مهم.', 'با یک آزمایش کوچک و مفید شروع کن.'],
     steps: [
-      { k: 'تصمیم اول', t: 'آیا کسی به این پیشنهاد عمل می‌کند؟', b: 'گروه تو می‌خواهد یک دستیار هوش مصنوعی برای برنامهٔ هفتگی بسازد. دستیار می‌تواند پیشنهاد بدهد، ولی مدیران گروه به‌ندرت برنامه را دوباره می‌بینند.', p: 'اول چه چیزی را امتحان می‌کنی؟', o: [
+      { k: 'تصمیم اول', t: 'آیا کسی به این پیشنهاد عمل می‌کند؟', b: 'یک دستیار هوشمند برنامهٔ هفتگی پیشنهاد می‌دهد. اما مدیران گروه به‌ندرت برنامه‌شان را دوباره می‌بینند.', p: 'اول چه چیزی را امتحان می‌کنی؟', o: [
         ['آیا مدیران با پیشنهاد، برنامه‌شان را عوض می‌کنند؟', 'درست است. اگر کسی به پیشنهاد عمل نکند، دستیار فایدهٔ زیادی ندارد.'],
         ['آیا متن پیشنهاد زیباست؟', 'متن خوب مهم است، اما اگر کسی از پیشنهاد استفاده نکند کافی نیست.'],
         ['آیا ظاهر صفحه خوب است؟', 'ظاهر را بعداً می‌توان عوض کرد. اول ببین ایده کمک می‌کند یا نه.'],
